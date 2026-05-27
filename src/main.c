@@ -30,12 +30,6 @@
 #include <sndfile.h>
 #include <gtk/gtk.h>
 
-#ifdef HAVE_LASH
-#include <lash/lash.h>
-
-lash_client_t *lash_client;
-#endif
-
 #ifdef HAVE_LIBREADLINE
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -96,10 +90,6 @@ int main(int argc, char *argv[])
     int console = 0;
     char port_name[32];
     pthread_t dt;
-#ifdef HAVE_LASH
-    lash_args_t *lash_args = lash_extract_args(&argc, &argv);
-     lash_event_t *event;
-#endif
 
     auto_begin_threshold = db2lin(DEFAULT_AUTO_BEGIN_THRESHOLD);
     auto_end_threshold = db2lin(DEFAULT_AUTO_END_THRESHOLD);
@@ -226,27 +216,12 @@ int main(int argc, char *argv[])
 
     process_init(buf_length);
 
-#ifdef HAVE_LASH
-    lash_client = lash_init (lash_args, "TimeMachine",
-                     0, /* would be LASH_Config_Data_Set etc. */
-                     LASH_PROTOCOL (2,0));
-    if (!lash_client) {
-	DEBUG(1, "could not initialise LASH\n");
-    }
-    event = lash_event_new_with_type(LASH_Client_Name);
-    lash_event_set_string(event, client_name);
-    lash_send_event(lash_client, event);
-#endif
-
     jack_set_process_callback(client, process, 0);
 
     if (jack_activate(client)) {
 	DEBUG(0, "cannot activate JACK client");
 	exit(1);
     }
-#ifdef HAVE_LASH
-    lash_jack_client_name(lash_client, client_name);
-#endif
 
     /* Create the jack ports */
     for (i = 0; i < num_ports; i++) {
@@ -338,10 +313,6 @@ int main(int argc, char *argv[])
     }
 #endif
 
-#ifdef HAVE_LASH
-      gtk_idle_add(idle_cb, lash_client);
-#endif
-
       gtk_main();
     }
 
@@ -369,35 +340,5 @@ void cleanup()
     exit(0);
 }
 
-#ifdef HAVE_LASH
-gboolean idle_cb(gpointer data)
-{
-    lash_client_t *lash_client = (lash_client_t *)data;
-    lash_event_t *event;
-    lash_config_t *config;
-
-    while ((event = lash_get_event(lash_client))) {
-	if (lash_event_get_type(event) == LASH_Save_Data_Set) {
-	    /* we can ignore this as timemachine has no state thats not on the
-             * command line */
-	} else if (lash_event_get_type(event) == LASH_Quit) {
-	    cleanup();
-	} else {
-	    DEBUG(0, "unhandled LASH event: type %d, '%s''\n",
-		   lash_event_get_type(event),
-		   lash_event_get_string(event));
-	}
-    }
-
-    while ((config = lash_get_config(lash_client))) {
-	DEBUG(0, "got unexpected LASH config: %s\n",
-	       lash_config_get_key(config));
-    }
-
-    usleep(10000);
-
-    return TRUE;
-}
-#endif
 
 /* vi:set ts=8 sts=4 sw=4: */
