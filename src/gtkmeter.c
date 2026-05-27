@@ -132,15 +132,10 @@ static void gtk_meter_measure(GtkWidget *widget, GtkOrientation orientation,
                               int *minimum_baseline, int *natural_baseline)
 {
     GtkMeter *meter = GTK_METER(widget);
-    int cross, along;
-
-    if (meter->direction == GTK_METER_UP || meter->direction == GTK_METER_DOWN) {
-        cross = METER_DEFAULT_WIDTH;
-        along = METER_DEFAULT_LENGTH;
-    } else {
-        cross = METER_DEFAULT_LENGTH;
-        along = METER_DEFAULT_WIDTH;
-    }
+    /* cross is always the thin dimension; along is always the long dimension.
+     * Direction only decides which maps to horizontal vs vertical. */
+    const int cross = METER_DEFAULT_WIDTH;
+    const int along = METER_DEFAULT_LENGTH;
 
     if (orientation == GTK_ORIENTATION_HORIZONTAL)
         *minimum = *natural = (meter->direction == GTK_METER_UP ||
