@@ -47,6 +47,7 @@ set(SOURCES
     src/gtkmeterscale.c
     src/meters.c
     src/threads.c
+    src/nsm.c
 )
 
 add_executable(timemachine ${SOURCES})

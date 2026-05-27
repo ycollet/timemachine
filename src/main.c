@@ -34,6 +34,7 @@
 #include "meters.h"
 #include "support.h"
 #include "main.h"
+#include "nsm.h"
 
 #define DEBUG(lvl, txt...) \
     if (verbosity >= lvl) fprintf(stderr, PACKAGE ": " txt)
@@ -224,6 +225,10 @@ int main(int argc, char *argv[])
 
     pthread_create(&dt, NULL, (void *)&writer_thread, NULL);
 
+#ifdef HAVE_LIBLO
+    nsm_init("TimeMachine", "timemachine");
+#endif
+
 #ifdef HAVE_LIBREADLINE
     if (console || !getenv("DISPLAY") || getenv("DISPLAY")[0] == '\0') {
 #ifdef HAVE_LIBLO
@@ -292,6 +297,10 @@ int main(int argc, char *argv[])
 
 void cleanup(void)
 {
+#ifdef HAVE_LIBLO
+    nsm_free();
+#endif
+
     jack_client_close(client);
 
     recording_quit();
