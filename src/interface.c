@@ -40,7 +40,6 @@ GtkWidget *create_window(const char *title)
     window = gtk_window_new();
     gtk_widget_set_name(window, "window");
     gtk_window_set_title(GTK_WINDOW(window), title);
-    gtk_window_set_default_size(GTK_WINDOW(window), 220, 120);
 
     vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_name(vbox1, "vbox1");
@@ -49,16 +48,19 @@ GtkWidget *create_window(const char *title)
     togglebutton1 = gtk_button_new();
     gtk_widget_set_name(togglebutton1, "togglebutton1");
     gtk_button_set_has_frame(GTK_BUTTON(togglebutton1), FALSE);
-    gtk_widget_set_hexpand(togglebutton1, TRUE);
-    gtk_widget_set_vexpand(togglebutton1, TRUE);
     gtk_box_append(GTK_BOX(vbox1), togglebutton1);
 
-    image1 = create_pixmap(window, "off.png");
+    /* GtkPicture with can_shrink=FALSE drives the button size from the image's
+     * natural CSS size (pixel_size / scale_factor), matching the GTK2 behaviour
+     * where the button sized to its image content. */
+    image1 = gtk_picture_new_for_paintable(img_off ? GDK_PAINTABLE(img_off) : NULL);
+    gtk_picture_set_can_shrink(GTK_PICTURE(image1), FALSE);
     gtk_widget_set_name(image1, "toggle_image");
     gtk_button_set_child(GTK_BUTTON(togglebutton1), image1);
 
     scale = gtk_meterscale_new(GTK_METERSCALE_BOTTOM, -60.0f, 6.0f);
     gtk_widget_set_name(scale, "scale_top");
+    gtk_widget_set_vexpand(scale, FALSE);
     gtk_widget_set_focusable(scale, FALSE);
     gtk_box_append(GTK_BOX(vbox1), scale);
 
@@ -70,6 +72,7 @@ GtkWidget *create_window(const char *title)
         gtk_widget_set_name(meter[i], name);
         gtk_meter_set_warn_point(GTK_METER(meter[i]), 0.0);
         gtk_widget_set_size_request(meter[i], -1, 16);
+        gtk_widget_set_vexpand(meter[i], FALSE);
         gtk_widget_set_focusable(meter[i], FALSE);
         gtk_box_append(GTK_BOX(vbox1), meter[i]);
     }
@@ -77,6 +80,7 @@ GtkWidget *create_window(const char *title)
     if (num_ports > 1) {
         scale = gtk_meterscale_new(GTK_METERSCALE_TOP, -60.0f, 6.0f);
         gtk_widget_set_name(scale, "scale_bottom");
+        gtk_widget_set_vexpand(scale, FALSE);
         gtk_widget_set_focusable(scale, FALSE);
         gtk_box_append(GTK_BOX(vbox1), scale);
     }
