@@ -5,16 +5,17 @@ include(CheckCSourceCompiles)
 include(GNUInstallDirs)
 find_package(PkgConfig REQUIRED)
 
-# Required dependencies
-pkg_check_modules(GTK    REQUIRED gtk4)
-pkg_check_modules(JACK   REQUIRED jack>=0.80.0)
-pkg_check_modules(SNDFILE REQUIRED sndfile>=1.0.0)
+# Required dependencies — IMPORTED_TARGET creates PkgConfig::* targets that
+# carry include dirs, compile flags, library names AND library search paths.
+pkg_check_modules(GTK     REQUIRED IMPORTED_TARGET gtk4)
+pkg_check_modules(JACK    REQUIRED IMPORTED_TARGET jack>=0.80.0)
+pkg_check_modules(SNDFILE REQUIRED IMPORTED_TARGET sndfile>=1.0.0)
 
 find_library(MATH_LIB m REQUIRED)
 find_package(Threads REQUIRED)
 
 # Optional: liblo (OSC support)
-pkg_check_modules(LIBLO liblo>=0.24)
+pkg_check_modules(LIBLO IMPORTED_TARGET liblo>=0.24)
 
 # Optional: readline (enables interactive console mode)
 find_library(CURSES_LIB curses)
@@ -50,24 +51,14 @@ set(SOURCES
 
 add_executable(timemachine ${SOURCES})
 
-target_include_directories(timemachine PRIVATE
-    src
-    ${GTK_INCLUDE_DIRS}
-    ${JACK_INCLUDE_DIRS}
-    ${SNDFILE_INCLUDE_DIRS}
-)
+target_include_directories(timemachine PRIVATE src)
 
-target_compile_options(timemachine PRIVATE
-    -g -Wall
-    ${GTK_CFLAGS_OTHER}
-    ${JACK_CFLAGS_OTHER}
-    ${SNDFILE_CFLAGS_OTHER}
-)
+target_compile_options(timemachine PRIVATE -g -Wall)
 
 target_link_libraries(timemachine PRIVATE
-    ${GTK_LIBRARIES}
-    ${JACK_LIBRARIES}
-    ${SNDFILE_LIBRARIES}
+    PkgConfig::GTK
+    PkgConfig::JACK
+    PkgConfig::SNDFILE
     ${MATH_LIB}
     Threads::Threads
 )
@@ -88,9 +79,7 @@ endif()
 # liblo (OSC)
 if(LIBLO_FOUND)
     target_compile_definitions(timemachine PRIVATE HAVE_LIBLO)
-    target_include_directories(timemachine PRIVATE ${LIBLO_INCLUDE_DIRS})
-    target_compile_options(timemachine PRIVATE ${LIBLO_CFLAGS_OTHER})
-    target_link_libraries(timemachine PRIVATE ${LIBLO_LIBRARIES})
+    target_link_libraries(timemachine PRIVATE PkgConfig::LIBLO)
 endif()
 
 # readline + curses (interactive console mode)
