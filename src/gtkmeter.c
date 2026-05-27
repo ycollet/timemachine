@@ -208,8 +208,19 @@ static void gtk_meter_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
     if (a_h > length) a_h = length;
     if (r_h > length) r_h = length;
 
+    /* Pixel position of the amber/yellow threshold along the bar */
+    int amber_px = (int)(meter->amber_frac * length);
+
     switch (meter->direction) {
     case GTK_METER_RIGHT:
+        /* Dim backlight — makes the meter visible even at silence */
+        cairo_set_source_rgb(cr, 0.0, 0.1, 0.0);
+        cairo_rectangle(cr, 1, 1, amber_px, w);
+        cairo_fill(cr);
+        cairo_set_source_rgb(cr, 0.1, 0.1, 0.0);
+        cairo_rectangle(cr, 1 + amber_px, 1, length - amber_px, w);
+        cairo_fill(cr);
+        /* Signal bars */
         cairo_set_source_rgb(cr, 0.0, 0.9, 0.0);
         cairo_rectangle(cr, 1, 1, g_h, w);
         cairo_fill(cr);
@@ -223,13 +234,23 @@ static void gtk_meter_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
             cairo_rectangle(cr, 1 + a_h, 1, r_h - a_h, w);
             cairo_fill(cr);
         }
-        cairo_set_source_rgb(cr, 0.9, 0.9, 0.0);
-        cairo_rectangle(cr, (int)(length * peak_frac), 1, 1, w);
-        cairo_fill(cr);
+        if (peak_frac > 0) {
+            cairo_set_source_rgb(cr, 0.9, 0.9, 0.0);
+            cairo_rectangle(cr, (int)(length * peak_frac), 1, 1, w);
+            cairo_fill(cr);
+        }
         break;
 
     case GTK_METER_UP:
     default:
+        /* Dim backlight — makes the meter visible even at silence */
+        cairo_set_source_rgb(cr, 0.1, 0.1, 0.0);
+        cairo_rectangle(cr, 1, 1, w, length - amber_px);
+        cairo_fill(cr);
+        cairo_set_source_rgb(cr, 0.0, 0.1, 0.0);
+        cairo_rectangle(cr, 1, length - amber_px + 1, w, amber_px);
+        cairo_fill(cr);
+        /* Signal bars */
         cairo_set_source_rgb(cr, 0.0, 0.9, 0.0);
         cairo_rectangle(cr, 1, length - g_h + 1, w, g_h);
         cairo_fill(cr);
