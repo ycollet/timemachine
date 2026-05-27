@@ -25,7 +25,7 @@
 #define DEFAULT_AUTO_END_TIME           DEFAULT_BUF_LENGTH
 
 extern GtkWidget  *main_window;
-extern GdkPixbuf  *img_on, *img_off, *img_busy;
+extern GdkTexture *img_on, *img_off, *img_busy;
 
 extern int          num_ports;
 extern char        *prefix;

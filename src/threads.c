@@ -294,9 +294,9 @@ gboolean meter_tick(gpointer user_data)
         GtkWidget *img = lookup_widget(main_window, "toggle_image");
 
         if (recording)
-            gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
+            gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_on));
         else
-            gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_off);
+            gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_off));
         gtk_widget_set_sensitive(img, TRUE);
 
         need_ui_sync = 0;

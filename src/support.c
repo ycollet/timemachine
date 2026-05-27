@@ -67,11 +67,11 @@ GtkWidget *create_pixmap(GtkWidget *widget, const gchar *filename)
     return image;
 }
 
-GdkPixbuf *create_pixbuf(const gchar *filename)
+GdkTexture *create_texture(const gchar *filename)
 {
-    gchar     *pathname;
-    GdkPixbuf *pixbuf;
-    GError    *error = NULL;
+    gchar      *pathname;
+    GdkTexture *texture;
+    GError     *error = NULL;
 
     if (!filename || !filename[0])
         return NULL;
@@ -82,12 +82,12 @@ GdkPixbuf *create_pixbuf(const gchar *filename)
         return NULL;
     }
 
-    pixbuf = gdk_pixbuf_new_from_file(pathname, &error);
-    if (!pixbuf) {
-        fprintf(stderr, "Failed to load pixbuf file: %s: %s\n",
+    texture = gdk_texture_new_from_filename(pathname, &error);
+    if (!texture) {
+        fprintf(stderr, "Failed to load texture: %s: %s\n",
                 pathname, error->message);
         g_error_free(error);
     }
     g_free(pathname);
-    return pixbuf;
+    return texture;
 }

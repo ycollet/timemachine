@@ -24,11 +24,11 @@ void on_togglebutton1_clicked(GtkButton *button, gpointer user_data)
 
     if (button_pressed) {
         recording_start();
-        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
+        gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_on));
     } else {
         recording_stop();
         gtk_widget_set_sensitive(img, FALSE);
-        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_busy);
+        gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_busy));
     }
 }
 
@@ -46,11 +46,11 @@ int osc_handler(const char *path, const char *types, lo_arg **argv, int argc,
 
     if (user_data) {
         recording_start();
-        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
+        gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_on));
     } else {
         recording_stop();
         gtk_widget_set_sensitive(img, FALSE);
-        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_busy);
+        gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_busy));
     }
 
     return 0;

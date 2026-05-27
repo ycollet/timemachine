@@ -58,7 +58,7 @@ unsigned int auto_end_time = DEFAULT_AUTO_END_TIME;
 jack_port_t *ports[MAX_PORTS];
 jack_client_t *client;
 
-GdkPixbuf *img_on, *img_off, *img_busy;
+GdkTexture *img_on, *img_off, *img_busy;
 
 #ifdef HAVE_LIBLO
 int osc_handler(const char *path, const char *types, lo_arg **argv, int argc,
@@ -261,12 +261,12 @@ int main(int argc, char *argv[])
         add_pixmap_directory("pixmaps");
         add_pixmap_directory("../pixmaps");
 
-        img_on   = create_pixbuf("on.png");
-        img_off  = create_pixbuf("off.png");
-        img_busy = create_pixbuf("busy.png");
+        img_on   = create_texture("on.png");
+        img_off  = create_texture("off.png");
+        img_busy = create_texture("busy.png");
 
         main_window = create_window(client_name);
-        gtk_widget_show(main_window);
+        gtk_window_present(GTK_WINDOW(main_window));
 
         bind_meters();
         g_timeout_add(100, meter_tick, NULL);
