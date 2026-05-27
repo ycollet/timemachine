@@ -234,7 +234,14 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef HAVE_LIBREADLINE
-    if (console || !getenv("DISPLAY") || getenv("DISPLAY")[0] == '\0') {
+    /* On macOS (Quartz backend) DISPLAY is never set but GTK still works.
+     * On Linux Wayland, WAYLAND_DISPLAY is set instead of DISPLAY. */
+    if (console
+#ifndef __APPLE__
+        || ((!getenv("DISPLAY") || getenv("DISPLAY")[0] == '\0') &&
+            (!getenv("WAYLAND_DISPLAY") || getenv("WAYLAND_DISPLAY")[0] == '\0'))
+#endif
+       ) {
 #ifdef HAVE_LIBLO
         lo_server_thread st = lo_server_thread_new(osc_port, NULL);
         if (st) {
