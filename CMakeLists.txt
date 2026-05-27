@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(timemachine VERSION 0.3.4 LANGUAGES C)
 
-include(CheckSymbolExists)
+include(CheckCSourceCompiles)
 include(GNUInstallDirs)
 find_package(PkgConfig REQUIRED)
 
@@ -20,10 +20,14 @@ pkg_check_modules(LIBLO liblo>=0.24)
 find_library(CURSES_LIB curses)
 find_library(READLINE_LIB readline)
 
-# Check for extended sndfile format support
+# Check for extended sndfile format support.
+# SF_FORMAT_W64 and SF_FORMAT_FLAC are enum values, not macros, so
+# check_symbol_exists cannot detect them — use check_c_source_compiles instead.
 set(CMAKE_REQUIRED_INCLUDES ${SNDFILE_INCLUDE_DIRS})
-check_symbol_exists(SF_FORMAT_W64  "sndfile.h" HAVE_W64)
-check_symbol_exists(SF_FORMAT_FLAC "sndfile.h" HAVE_FLAC)
+check_c_source_compiles("#include <sndfile.h>
+int main(void) { int x = SF_FORMAT_W64;  return 0; }" HAVE_W64)
+check_c_source_compiles("#include <sndfile.h>
+int main(void) { int x = SF_FORMAT_FLAC; return 0; }" HAVE_FLAC)
 unset(CMAKE_REQUIRED_INCLUDES)
 
 if(NOT HAVE_W64)
