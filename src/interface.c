@@ -40,6 +40,7 @@ GtkWidget *create_window(const char *title)
     window = gtk_window_new();
     gtk_widget_set_name(window, "window");
     gtk_window_set_title(GTK_WINDOW(window), title);
+    gtk_window_set_default_size(GTK_WINDOW(window), 220, 120);
 
     vbox1 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_name(vbox1, "vbox1");
@@ -48,6 +49,8 @@ GtkWidget *create_window(const char *title)
     togglebutton1 = gtk_button_new();
     gtk_widget_set_name(togglebutton1, "togglebutton1");
     gtk_button_set_has_frame(GTK_BUTTON(togglebutton1), FALSE);
+    gtk_widget_set_hexpand(togglebutton1, TRUE);
+    gtk_widget_set_vexpand(togglebutton1, TRUE);
     gtk_box_append(GTK_BOX(vbox1), togglebutton1);
 
     image1 = create_pixmap(window, "off.png");
@@ -56,7 +59,6 @@ GtkWidget *create_window(const char *title)
 
     scale = gtk_meterscale_new(GTK_METERSCALE_BOTTOM, -60.0f, 6.0f);
     gtk_widget_set_name(scale, "scale_top");
-    gtk_widget_set_size_request(scale, -1, 10);
     gtk_widget_set_focusable(scale, FALSE);
     gtk_box_append(GTK_BOX(vbox1), scale);
 
@@ -67,7 +69,7 @@ GtkWidget *create_window(const char *title)
         meter[i] = make_meter(-60, 6);
         gtk_widget_set_name(meter[i], name);
         gtk_meter_set_warn_point(GTK_METER(meter[i]), 0.0);
-        gtk_widget_set_size_request(meter[i], -1, 10);
+        gtk_widget_set_size_request(meter[i], -1, 16);
         gtk_widget_set_focusable(meter[i], FALSE);
         gtk_box_append(GTK_BOX(vbox1), meter[i]);
     }
@@ -75,7 +77,6 @@ GtkWidget *create_window(const char *title)
     if (num_ports > 1) {
         scale = gtk_meterscale_new(GTK_METERSCALE_TOP, -60.0f, 6.0f);
         gtk_widget_set_name(scale, "scale_bottom");
-        gtk_widget_set_size_request(scale, -1, 10);
         gtk_widget_set_focusable(scale, FALSE);
         gtk_box_append(GTK_BOX(vbox1), scale);
     }

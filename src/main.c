@@ -273,6 +273,18 @@ int main(int argc, char *argv[])
     {
         gtk_init();
 
+        /* Resolve pixmaps relative to the executable so the app can be
+         * launched from any working directory (e.g. via Finder on macOS). */
+        {
+            gchar *exe_dir = g_path_get_dirname(argv[0]);
+            gchar *p = g_build_filename(exe_dir, "..", "pixmaps", NULL);
+            add_pixmap_directory(p);
+            g_free(p);
+            p = g_build_filename(exe_dir, "pixmaps", NULL);
+            add_pixmap_directory(p);
+            g_free(p);
+            g_free(exe_dir);
+        }
         add_pixmap_directory(PACKAGE_DATA_DIR "/" PACKAGE "/pixmaps");
         add_pixmap_directory("pixmaps");
         add_pixmap_directory("../pixmaps");
