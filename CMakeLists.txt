@@ -6,7 +6,7 @@ include(GNUInstallDirs)
 find_package(PkgConfig REQUIRED)
 
 # Required dependencies
-pkg_check_modules(GTK    REQUIRED gtk+-2.0>=2.0.0)
+pkg_check_modules(GTK    REQUIRED gtk4)
 pkg_check_modules(JACK   REQUIRED jack>=0.80.0)
 pkg_check_modules(SNDFILE REQUIRED sndfile>=1.0.0)
 

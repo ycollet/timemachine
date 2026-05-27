@@ -24,7 +24,6 @@
 #include <jack/jack.h>
 #include <gtk/gtk.h>
 
-#include "config.h"
 #include "support.h"
 #include "main.h"
 #include "threads.h"
@@ -294,13 +293,10 @@ gboolean meter_tick(gpointer user_data)
     if (need_ui_sync) {
 	GtkWidget *img = lookup_widget(main_window, "toggle_image");
 
-	if (recording) {
+	if (recording)
 	    gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
-	    gtk_window_set_icon(GTK_WINDOW(main_window), icon_on);
-	} else {
+	else
 	    gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_off);
-	    gtk_window_set_icon(GTK_WINDOW(main_window), icon_off);
-	}
 	gtk_widget_set_sensitive(img, TRUE);
 
 	need_ui_sync = 0;

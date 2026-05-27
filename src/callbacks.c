@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 #include <gtk/gtk.h>
 
 #include "main.h"
@@ -17,64 +13,56 @@
 
 static int button_pressed = 0;
 
-void on_togglebutton1_clicked(GtkButton * button, gpointer user_data)
+void on_togglebutton1_clicked(GtkButton *button, gpointer user_data)
 {
     GtkWidget *img = lookup_widget(main_window, "toggle_image");
 
-    if (!GTK_WIDGET_IS_SENSITIVE(img)) {
-	return;
-    }
+    if (!gtk_widget_is_sensitive(img))
+        return;
 
     button_pressed = !button_pressed;
 
     if (button_pressed) {
-	recording_start();
-	gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
-	gtk_window_set_icon(GTK_WINDOW(main_window), icon_on);
+        recording_start();
+        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
     } else {
-	recording_stop();
-	gtk_widget_set_sensitive(img, FALSE);
-	gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_busy);
-	gtk_window_set_icon(GTK_WINDOW(main_window), icon_off);
+        recording_stop();
+        gtk_widget_set_sensitive(img, FALSE);
+        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_busy);
     }
 }
 
-gboolean on_window_delete_event(GtkWidget * widget, GdkEvent * event,
-				gpointer user_data)
+gboolean on_window_close_request(GtkWindow *window, gpointer user_data)
 {
-    gtk_main_quit();
-
+    cleanup();
     return FALSE;
 }
 
 #ifdef HAVE_LIBLO
 int osc_handler(const char *path, const char *types, lo_arg **argv, int argc,
-		lo_message msg, void *user_data)
+                lo_message msg, void *user_data)
 {
     GtkWidget *img = lookup_widget(main_window, "toggle_image");
 
     if (user_data) {
-	recording_start();
-	gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
-	gtk_window_set_icon(GTK_WINDOW(main_window), icon_on);
+        recording_start();
+        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_on);
     } else {
-	recording_stop();
-	gtk_widget_set_sensitive(img, FALSE);
-	gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_busy);
-	gtk_window_set_icon(GTK_WINDOW(main_window), icon_off);
+        recording_stop();
+        gtk_widget_set_sensitive(img, FALSE);
+        gtk_image_set_from_pixbuf(GTK_IMAGE(img), img_busy);
     }
 
     return 0;
 }
 
 int osc_handler_nox(const char *path, const char *types, lo_arg **argv,
-		int argc, lo_message msg, void *user_data)
+                    int argc, lo_message msg, void *user_data)
 {
-    if (user_data) {
-	recording_start();
-    } else {
-	recording_stop();
-    }
+    if (user_data)
+        recording_start();
+    else
+        recording_stop();
 
     return 0;
 }
