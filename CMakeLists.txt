@@ -92,6 +92,39 @@ if(READLINE_LIB)
     endif()
 endif()
 
+# i18n (gettext)
+find_program(MSGFMT_EXECUTABLE msgfmt)
+find_library(INTL_LIB intl)
+
+if(MSGFMT_EXECUTABLE)
+    target_compile_definitions(timemachine PRIVATE
+        GETTEXT_PACKAGE="${PROJECT_NAME}"
+        LOCALEDIR="${CMAKE_INSTALL_FULL_LOCALEDIR}"
+    )
+    if(INTL_LIB)
+        target_link_libraries(timemachine PRIVATE ${INTL_LIB})
+    endif()
+
+    set(MO_FILES "")
+    foreach(lang en fr)
+        set(po_file ${CMAKE_CURRENT_SOURCE_DIR}/po/${lang}.po)
+        set(mo_dir  ${CMAKE_CURRENT_BINARY_DIR}/po/${lang}/LC_MESSAGES)
+        set(mo_file ${mo_dir}/${PROJECT_NAME}.mo)
+        add_custom_command(
+            OUTPUT ${mo_file}
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${mo_dir}
+            COMMAND ${MSGFMT_EXECUTABLE} -o ${mo_file} ${po_file}
+            DEPENDS ${po_file}
+            COMMENT "Compiling ${lang} translation"
+        )
+        list(APPEND MO_FILES ${mo_file})
+        install(FILES ${mo_file}
+            DESTINATION ${CMAKE_INSTALL_LOCALEDIR}/${lang}/LC_MESSAGES
+        )
+    endforeach()
+    add_custom_target(translations ALL DEPENDS ${MO_FILES})
+endif()
+
 # Install
 install(TARGETS timemachine DESTINATION ${CMAKE_INSTALL_BINDIR})
 

@@ -19,6 +19,7 @@
 #include <getopt.h>
 #include <sndfile.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #ifdef HAVE_LIBREADLINE
 #include <readline/readline.h>
@@ -77,6 +78,9 @@ int main(int argc, char *argv[])
     int console = 0;
     char port_name[32];
     pthread_t dt;
+
+    bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+    textdomain(GETTEXT_PACKAGE);
 
     auto_begin_threshold = db2lin(DEFAULT_AUTO_BEGIN_THRESHOLD);
     auto_end_threshold   = db2lin(DEFAULT_AUTO_END_THRESHOLD);
@@ -138,40 +142,40 @@ int main(int argc, char *argv[])
         num_ports = argc - optind;
 
     if (num_ports < 1 || num_ports > MAX_PORTS || help) {
-        fprintf(stderr, "Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n\t"
-                        "[-t buffer-length] [-p file prefix] [-f format]\n\t"
-                        "[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n\t"
-                        "[port-name ...]\n\n", argv[0]);
-        fprintf(stderr, "\t-h\tshow this help\n");
-        fprintf(stderr, "\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n");
-        fprintf(stderr, "\t-c\tspecify number of recording channels\n");
-        fprintf(stderr, "\t-n\tspecify the JACK name timemachine will use\n");
-        fprintf(stderr, "\t-t\tspecify the pre-recording buffer length\n");
-        fprintf(stderr, "\t-p\tspecify the saved file prefix, may include path\n");
-        fprintf(stderr, "\t-s\tuse safer characters in filename (windows compatibility)\n");
-        fprintf(stderr, "\t-f\tspecify the saved file format\n");
-        fprintf(stderr, "\t-a\tenable automatic sound-triggered recording\n");
-        fprintf(stderr, "\t-b\tspecify threshold above which automatic recording will begin\n");
-        fprintf(stderr, "\t-e\tspecify threshold below which automatic recording will end\n");
-        fprintf(stderr, "\t-T\tspecify silence length before automatic recording ends\n");
+        fprintf(stderr, _("Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n\t"
+                          "[-t buffer-length] [-p file prefix] [-f format]\n\t"
+                          "[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n\t"
+                          "[port-name ...]\n\n"), argv[0]);
+        fprintf(stderr, _("\t-h\tshow this help\n"));
+        fprintf(stderr, _("\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n"));
+        fprintf(stderr, _("\t-c\tspecify number of recording channels\n"));
+        fprintf(stderr, _("\t-n\tspecify the JACK name timemachine will use\n"));
+        fprintf(stderr, _("\t-t\tspecify the pre-recording buffer length\n"));
+        fprintf(stderr, _("\t-p\tspecify the saved file prefix, may include path\n"));
+        fprintf(stderr, _("\t-s\tuse safer characters in filename (windows compatibility)\n"));
+        fprintf(stderr, _("\t-f\tspecify the saved file format\n"));
+        fprintf(stderr, _("\t-a\tenable automatic sound-triggered recording\n"));
+        fprintf(stderr, _("\t-b\tspecify threshold above which automatic recording will begin\n"));
+        fprintf(stderr, _("\t-e\tspecify threshold below which automatic recording will end\n"));
+        fprintf(stderr, _("\t-T\tspecify silence length before automatic recording ends\n"));
 #ifdef HAVE_LIBLO
-        fprintf(stderr, "\t-o\tspecify the OSC port timemachine will listen on\n");
+        fprintf(stderr, _("\t-o\tspecify the OSC port timemachine will listen on\n"));
 #endif
         fprintf(stderr, "\n");
-        fprintf(stderr, "\tchannels must be in the range 1-8, default %d\n",
+        fprintf(stderr, _("\tchannels must be in the range 1-8, default %d\n"),
                 DEFAULT_NUM_PORTS);
-        fprintf(stderr, "\tjack-name, default \"%s\"\n", DEFAULT_CLIENT_NAME);
-        fprintf(stderr, "\tfile-prefix, default \"%s\"\n", DEFAULT_PREFIX);
-        fprintf(stderr, "\tbuffer-length, default %d secs\n", DEFAULT_BUF_LENGTH);
-        fprintf(stderr, "\tformat, default '%s', options: wav, w64, flac\n", DEFAULT_FORMAT);
-        fprintf(stderr, "\tbegin-threshold, default %.1f dB\n", DEFAULT_AUTO_BEGIN_THRESHOLD);
-        fprintf(stderr, "\tend-threshold, default %.1f dB\n", DEFAULT_AUTO_END_THRESHOLD);
-        fprintf(stderr, "\tend-time, default %d secs\n", DEFAULT_AUTO_END_TIME);
+        fprintf(stderr, _("\tjack-name, default \"%s\"\n"), DEFAULT_CLIENT_NAME);
+        fprintf(stderr, _("\tfile-prefix, default \"%s\"\n"), DEFAULT_PREFIX);
+        fprintf(stderr, _("\tbuffer-length, default %d secs\n"), DEFAULT_BUF_LENGTH);
+        fprintf(stderr, _("\tformat, default '%s', options: wav, w64, flac\n"), DEFAULT_FORMAT);
+        fprintf(stderr, _("\tbegin-threshold, default %.1f dB\n"), DEFAULT_AUTO_BEGIN_THRESHOLD);
+        fprintf(stderr, _("\tend-threshold, default %.1f dB\n"), DEFAULT_AUTO_END_THRESHOLD);
+        fprintf(stderr, _("\tend-time, default %d secs\n"), DEFAULT_AUTO_END_TIME);
 #ifdef HAVE_LIBLO
-        fprintf(stderr, "\tosc-port, default %s\n", DEFAULT_OSC_PORT);
+        fprintf(stderr, _("\tosc-port, default %s\n"), DEFAULT_OSC_PORT);
 #endif
         fprintf(stderr, "\n");
-        fprintf(stderr, "specifying port names to connect to on the command line overrides -c\n\n");
+        fprintf(stderr, _("specifying port names to connect to on the command line overrides -c\n\n"));
         exit(1);
     }
 
@@ -187,7 +191,7 @@ int main(int argc, char *argv[])
 #endif
 
     if (format_sf == 0)
-        fprintf(stderr, "Unknown format '%s'\n", format_name);
+        fprintf(stderr, _("Unknown format '%s'\n"), format_name);
 
     if ((client = jack_client_open(client_name, 0, NULL)) == 0) {
         DEBUG(0, "jack server not running?\n");
@@ -242,7 +246,7 @@ int main(int argc, char *argv[])
 #endif
         int done = 0;
         while (!done) {
-            char *line = readline("TimeMachine> ");
+            char *line = readline(_("TimeMachine> "));
             if (!line) {
                 printf("EOF\n");
                 break;
@@ -252,8 +256,8 @@ int main(int argc, char *argv[])
                 if (strncmp(line, "q", 1) == 0)             done = 1;
                 else if (strncmp(line, "start", 3) == 0)    recording_start();
                 else if (strncmp(line, "stop",  3) == 0)    recording_stop();
-                else if (strncmp(line, "help",  3) == 0)    printf("Commands: start stop\n");
-                else                                         printf("Unknown command\n");
+                else if (strncmp(line, "help",  3) == 0)    printf(_("Commands: start stop\n"));
+                else                                         printf(_("Unknown command\n"));
             }
             free(line);
         }

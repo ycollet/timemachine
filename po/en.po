@@ -1,0 +1,138 @@
+# English translation for TimeMachine
+# Copyright (C) 2004 Steve Harris
+# This file is distributed under the same license as the timemachine package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: timemachine 0.3.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 00:00+0000\n"
+"PO-Revision-Date: 2026-05-27 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c
+msgid ""
+"Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n"
+"\t[-t buffer-length] [-p file prefix] [-f format]\n"
+"\t[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n"
+"\t[port-name ...]\n"
+"\n"
+msgstr ""
+"Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n"
+"\t[-t buffer-length] [-p file prefix] [-f format]\n"
+"\t[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n"
+"\t[port-name ...]\n"
+"\n"
+
+#: src/main.c
+msgid "\t-h\tshow this help\n"
+msgstr "\t-h\tshow this help\n"
+
+#: src/main.c
+msgid "\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n"
+msgstr "\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n"
+
+#: src/main.c
+msgid "\t-c\tspecify number of recording channels\n"
+msgstr "\t-c\tspecify number of recording channels\n"
+
+#: src/main.c
+msgid "\t-n\tspecify the JACK name timemachine will use\n"
+msgstr "\t-n\tspecify the JACK name timemachine will use\n"
+
+#: src/main.c
+msgid "\t-t\tspecify the pre-recording buffer length\n"
+msgstr "\t-t\tspecify the pre-recording buffer length\n"
+
+#: src/main.c
+msgid "\t-p\tspecify the saved file prefix, may include path\n"
+msgstr "\t-p\tspecify the saved file prefix, may include path\n"
+
+#: src/main.c
+msgid "\t-s\tuse safer characters in filename (windows compatibility)\n"
+msgstr "\t-s\tuse safer characters in filename (windows compatibility)\n"
+
+#: src/main.c
+msgid "\t-f\tspecify the saved file format\n"
+msgstr "\t-f\tspecify the saved file format\n"
+
+#: src/main.c
+msgid "\t-a\tenable automatic sound-triggered recording\n"
+msgstr "\t-a\tenable automatic sound-triggered recording\n"
+
+#: src/main.c
+msgid "\t-b\tspecify threshold above which automatic recording will begin\n"
+msgstr "\t-b\tspecify threshold above which automatic recording will begin\n"
+
+#: src/main.c
+msgid "\t-e\tspecify threshold below which automatic recording will end\n"
+msgstr "\t-e\tspecify threshold below which automatic recording will end\n"
+
+#: src/main.c
+msgid "\t-T\tspecify silence length before automatic recording ends\n"
+msgstr "\t-T\tspecify silence length before automatic recording ends\n"
+
+#: src/main.c
+msgid "\t-o\tspecify the OSC port timemachine will listen on\n"
+msgstr "\t-o\tspecify the OSC port timemachine will listen on\n"
+
+#: src/main.c
+msgid "\tchannels must be in the range 1-8, default %d\n"
+msgstr "\tchannels must be in the range 1-8, default %d\n"
+
+#: src/main.c
+msgid "\tjack-name, default \"%s\"\n"
+msgstr "\tjack-name, default \"%s\"\n"
+
+#: src/main.c
+msgid "\tfile-prefix, default \"%s\"\n"
+msgstr "\tfile-prefix, default \"%s\"\n"
+
+#: src/main.c
+msgid "\tbuffer-length, default %d secs\n"
+msgstr "\tbuffer-length, default %d secs\n"
+
+#: src/main.c
+msgid "\tformat, default '%s', options: wav, w64, flac\n"
+msgstr "\tformat, default '%s', options: wav, w64, flac\n"
+
+#: src/main.c
+msgid "\tbegin-threshold, default %.1f dB\n"
+msgstr "\tbegin-threshold, default %.1f dB\n"
+
+#: src/main.c
+msgid "\tend-threshold, default %.1f dB\n"
+msgstr "\tend-threshold, default %.1f dB\n"
+
+#: src/main.c
+msgid "\tend-time, default %d secs\n"
+msgstr "\tend-time, default %d secs\n"
+
+#: src/main.c
+msgid "\tosc-port, default %s\n"
+msgstr "\tosc-port, default %s\n"
+
+#: src/main.c
+msgid "specifying port names to connect to on the command line overrides -c\n\n"
+msgstr "specifying port names to connect to on the command line overrides -c\n\n"
+
+#: src/main.c
+msgid "Unknown format '%s'\n"
+msgstr "Unknown format '%s'\n"
+
+#: src/main.c
+msgid "TimeMachine> "
+msgstr "TimeMachine> "
+
+#: src/main.c
+msgid "Commands: start stop\n"
+msgstr "Commands: start stop\n"
+
+#: src/main.c
+msgid "Unknown command\n"
+msgstr "Unknown command\n"

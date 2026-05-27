@@ -1,0 +1,133 @@
+# TimeMachine - JACK pre-recording buffer
+# Copyright (C) 2004 Steve Harris
+# This file is distributed under the same license as the timemachine package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: timemachine 0.3.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main.c
+msgid ""
+"Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n"
+"\t[-t buffer-length] [-p file prefix] [-f format]\n"
+"\t[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n"
+"\t[port-name ...]\n"
+"\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-h\tshow this help\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-c\tspecify number of recording channels\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-n\tspecify the JACK name timemachine will use\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-t\tspecify the pre-recording buffer length\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-p\tspecify the saved file prefix, may include path\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-s\tuse safer characters in filename (windows compatibility)\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-f\tspecify the saved file format\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-a\tenable automatic sound-triggered recording\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-b\tspecify threshold above which automatic recording will begin\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-e\tspecify threshold below which automatic recording will end\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-T\tspecify silence length before automatic recording ends\n"
+msgstr ""
+
+#: src/main.c
+msgid "\t-o\tspecify the OSC port timemachine will listen on\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tchannels must be in the range 1-8, default %d\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tjack-name, default \"%s\"\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tfile-prefix, default \"%s\"\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tbuffer-length, default %d secs\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tformat, default '%s', options: wav, w64, flac\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tbegin-threshold, default %.1f dB\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tend-threshold, default %.1f dB\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tend-time, default %d secs\n"
+msgstr ""
+
+#: src/main.c
+msgid "\tosc-port, default %s\n"
+msgstr ""
+
+#: src/main.c
+msgid "specifying port names to connect to on the command line overrides -c\n\n"
+msgstr ""
+
+#: src/main.c
+msgid "Unknown format '%s'\n"
+msgstr ""
+
+#: src/main.c
+msgid "TimeMachine> "
+msgstr ""
+
+#: src/main.c
+msgid "Commands: start stop\n"
+msgstr ""
+
+#: src/main.c
+msgid "Unknown command\n"
+msgstr ""

@@ -1,5 +1,6 @@
 *.o
 *.orig
+*.mo
 Makefile
 Makefile.in
 *.m4

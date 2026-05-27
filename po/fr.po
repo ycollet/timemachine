@@ -1,0 +1,139 @@
+# Traduction française de TimeMachine
+# Copyright (C) 2004 Steve Harris
+# Ce fichier est distribué sous la même licence que le paquet timemachine.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: timemachine 0.3.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 00:00+0000\n"
+"PO-Revision-Date: 2026-05-27 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/main.c
+msgid ""
+"Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n"
+"\t[-t buffer-length] [-p file prefix] [-f format]\n"
+"\t[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n"
+"\t[port-name ...]\n"
+"\n"
+msgstr ""
+"Utilisation %s : [-h] [-i] [-c canaux] [-n nom-jack]\n"
+"\t[-t durée-tampon] [-p préfixe-fichier] [-f format]\n"
+"\t[-a] [-b seuil-début] [-e seuil-fin] [-T durée-fin]\n"
+"\t[nom-port ...]\n"
+"\n"
+
+#: src/main.c
+msgid "\t-h\tshow this help\n"
+msgstr "\t-h\tafficher cette aide\n"
+
+#: src/main.c
+msgid "\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n"
+msgstr "\t-i\tmode interactif (console au lieu de X11), activé aussi\n\t\tsi DISPLAY n'est pas défini\n"
+
+#: src/main.c
+msgid "\t-c\tspecify number of recording channels\n"
+msgstr "\t-c\tspécifier le nombre de canaux d'enregistrement\n"
+
+#: src/main.c
+msgid "\t-n\tspecify the JACK name timemachine will use\n"
+msgstr "\t-n\tspécifier le nom JACK que timemachine utilisera\n"
+
+#: src/main.c
+msgid "\t-t\tspecify the pre-recording buffer length\n"
+msgstr "\t-t\tspécifier la durée du tampon de pré-enregistrement\n"
+
+#: src/main.c
+msgid "\t-p\tspecify the saved file prefix, may include path\n"
+msgstr "\t-p\tspécifier le préfixe des fichiers sauvegardés (peut inclure un chemin)\n"
+
+#: src/main.c
+msgid "\t-s\tuse safer characters in filename (windows compatibility)\n"
+msgstr "\t-s\tutiliser des caractères sûrs dans le nom de fichier (compatibilité Windows)\n"
+
+#: src/main.c
+msgid "\t-f\tspecify the saved file format\n"
+msgstr "\t-f\tspécifier le format des fichiers sauvegardés\n"
+
+#: src/main.c
+msgid "\t-a\tenable automatic sound-triggered recording\n"
+msgstr "\t-a\tactiver l'enregistrement automatique déclenché par le son\n"
+
+#: src/main.c
+msgid "\t-b\tspecify threshold above which automatic recording will begin\n"
+msgstr "\t-b\tspécifier le seuil au-dessus duquel l'enregistrement automatique commence\n"
+
+#: src/main.c
+msgid "\t-e\tspecify threshold below which automatic recording will end\n"
+msgstr "\t-e\tspécifier le seuil en-dessous duquel l'enregistrement automatique s'arrête\n"
+
+#: src/main.c
+msgid "\t-T\tspecify silence length before automatic recording ends\n"
+msgstr "\t-T\tspécifier la durée de silence avant la fin de l'enregistrement automatique\n"
+
+#: src/main.c
+msgid "\t-o\tspecify the OSC port timemachine will listen on\n"
+msgstr "\t-o\tspécifier le port OSC sur lequel timemachine écoutera\n"
+
+#: src/main.c
+msgid "\tchannels must be in the range 1-8, default %d\n"
+msgstr "\tle nombre de canaux doit être entre 1 et 8, défaut %d\n"
+
+#: src/main.c
+msgid "\tjack-name, default \"%s\"\n"
+msgstr "\tnom JACK, défaut \"%s\"\n"
+
+#: src/main.c
+msgid "\tfile-prefix, default \"%s\"\n"
+msgstr "\tpréfixe de fichier, défaut \"%s\"\n"
+
+#: src/main.c
+msgid "\tbuffer-length, default %d secs\n"
+msgstr "\tdurée de tampon, défaut %d secondes\n"
+
+#: src/main.c
+msgid "\tformat, default '%s', options: wav, w64, flac\n"
+msgstr "\tformat, défaut '%s', options : wav, w64, flac\n"
+
+#: src/main.c
+msgid "\tbegin-threshold, default %.1f dB\n"
+msgstr "\tseuil de début, défaut %.1f dB\n"
+
+#: src/main.c
+msgid "\tend-threshold, default %.1f dB\n"
+msgstr "\tseuil de fin, défaut %.1f dB\n"
+
+#: src/main.c
+msgid "\tend-time, default %d secs\n"
+msgstr "\tdurée de fin, défaut %d secondes\n"
+
+#: src/main.c
+msgid "\tosc-port, default %s\n"
+msgstr "\tport OSC, défaut %s\n"
+
+#: src/main.c
+msgid "specifying port names to connect to on the command line overrides -c\n\n"
+msgstr "spécifier les noms de ports en ligne de commande remplace -c\n\n"
+
+#: src/main.c
+msgid "Unknown format '%s'\n"
+msgstr "Format inconnu '%s'\n"
+
+#: src/main.c
+msgid "TimeMachine> "
+msgstr "TimeMachine> "
+
+#: src/main.c
+msgid "Commands: start stop\n"
+msgstr "Commandes : start stop\n"
+
+#: src/main.c
+msgid "Unknown command\n"
+msgstr "Commande inconnue\n"
