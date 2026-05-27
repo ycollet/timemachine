@@ -18,19 +18,19 @@
 
 static void gtk_meter_dispose                  (GObject          *object);
 static void gtk_meter_snapshot                 (GtkWidget        *widget,
-        GtkSnapshot      *snapshot);
+                                                GtkSnapshot      *snapshot);
 static void gtk_meter_measure                  (GtkWidget        *widget,
-        GtkOrientation    orientation,
-        int               for_size,
-        int              *minimum,
-        int              *natural,
-        int              *minimum_baseline,
-        int              *natural_baseline);
+                                                GtkOrientation    orientation,
+                                                int               for_size,
+                                                int              *minimum,
+                                                int              *natural,
+                                                int              *minimum_baseline,
+                                                int              *natural_baseline);
 static void gtk_meter_update                   (GtkMeter         *meter);
 static void gtk_meter_adjustment_changed       (GtkAdjustment    *adjustment,
-        gpointer          data);
+                                                gpointer          data);
 static void gtk_meter_adjustment_value_changed (GtkAdjustment    *adjustment,
-        gpointer          data);
+                                                gpointer          data);
 static float iec_scale(float db);
 
 G_DEFINE_TYPE(GtkMeter, gtk_meter, GTK_TYPE_WIDGET)
@@ -127,9 +127,9 @@ void gtk_meter_set_adjustment(GtkMeter *meter, GtkAdjustment *adjustment)
 }
 
 static void gtk_meter_measure(GtkWidget *widget, GtkOrientation orientation,
-                              int for_size,
-                              int *minimum, int *natural,
-                              int *minimum_baseline, int *natural_baseline)
+                               int for_size,
+                               int *minimum, int *natural,
+                               int *minimum_baseline, int *natural_baseline)
 {
     GtkMeter *meter = GTK_METER(widget);
     int cross, along;
@@ -176,16 +176,16 @@ static void gtk_meter_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
     }
 
     switch (meter->direction) {
-    case GTK_METER_UP:
-    case GTK_METER_DOWN:
-        length = height - 2;
-        w      = width  - 2;
-        break;
-    case GTK_METER_LEFT:
-    case GTK_METER_RIGHT:
-        length = width  - 2;
-        w      = height - 2;
-        break;
+        case GTK_METER_UP:
+        case GTK_METER_DOWN:
+            length = height - 2;
+            w      = width  - 2;
+            break;
+        case GTK_METER_LEFT:
+        case GTK_METER_RIGHT:
+            length = width  - 2;
+            w      = height - 2;
+            break;
     }
 
     val = iec_scale(gtk_adjustment_get_value(meter->adjustment));
@@ -214,46 +214,46 @@ static void gtk_meter_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
     if (r_h > length) r_h = length;
 
     switch (meter->direction) {
-    case GTK_METER_RIGHT:
-        cairo_set_source_rgb(cr, 0.0, 0.9, 0.0);
-        cairo_rectangle(cr, 1, 1, g_h, w);
-        cairo_fill(cr);
-        if (a_h > g_h) {
-            cairo_set_source_rgb(cr, 0.75, 0.85, 0.0);
-            cairo_rectangle(cr, 1 + g_h, 1, a_h - g_h, w);
+        case GTK_METER_RIGHT:
+            cairo_set_source_rgb(cr, 0.0, 0.9, 0.0);
+            cairo_rectangle(cr, 1, 1, g_h, w);
             cairo_fill(cr);
-        }
-        if (r_h > a_h) {
-            cairo_set_source_rgb(cr, 0.9, 0.0, 0.0);
-            cairo_rectangle(cr, 1 + a_h, 1, r_h - a_h, w);
-            cairo_fill(cr);
-        }
-        cairo_set_source_rgb(cr, 0.9, 0.9, 0.0);
-        cairo_rectangle(cr, (int)(length * peak_frac), 1, 1, w);
-        cairo_fill(cr);
-        break;
-
-    case GTK_METER_UP:
-    default:
-        cairo_set_source_rgb(cr, 0.0, 0.9, 0.0);
-        cairo_rectangle(cr, 1, length - g_h + 1, w, g_h);
-        cairo_fill(cr);
-        if (a_h > g_h) {
-            cairo_set_source_rgb(cr, 0.75, 0.85, 0.0);
-            cairo_rectangle(cr, 1, length - a_h + 1, w, a_h - g_h);
-            cairo_fill(cr);
-        }
-        if (r_h > a_h) {
-            cairo_set_source_rgb(cr, 0.9, 0.0, 0.0);
-            cairo_rectangle(cr, 1, length - r_h + 1, w, r_h - a_h);
-            cairo_fill(cr);
-        }
-        if (peak_frac > 0) {
+            if (a_h > g_h) {
+                cairo_set_source_rgb(cr, 0.75, 0.85, 0.0);
+                cairo_rectangle(cr, 1 + g_h, 1, a_h - g_h, w);
+                cairo_fill(cr);
+            }
+            if (r_h > a_h) {
+                cairo_set_source_rgb(cr, 0.9, 0.0, 0.0);
+                cairo_rectangle(cr, 1 + a_h, 1, r_h - a_h, w);
+                cairo_fill(cr);
+            }
             cairo_set_source_rgb(cr, 0.9, 0.9, 0.0);
-            cairo_rectangle(cr, 1, (int)(length * (1.0f - peak_frac)) + 1, w, 1);
+            cairo_rectangle(cr, (int)(length * peak_frac), 1, 1, w);
             cairo_fill(cr);
-        }
-        break;
+            break;
+
+        case GTK_METER_UP:
+        default:
+            cairo_set_source_rgb(cr, 0.0, 0.9, 0.0);
+            cairo_rectangle(cr, 1, length - g_h + 1, w, g_h);
+            cairo_fill(cr);
+            if (a_h > g_h) {
+                cairo_set_source_rgb(cr, 0.75, 0.85, 0.0);
+                cairo_rectangle(cr, 1, length - a_h + 1, w, a_h - g_h);
+                cairo_fill(cr);
+            }
+            if (r_h > a_h) {
+                cairo_set_source_rgb(cr, 0.9, 0.0, 0.0);
+                cairo_rectangle(cr, 1, length - r_h + 1, w, r_h - a_h);
+                cairo_fill(cr);
+            }
+            if (peak_frac > 0) {
+                cairo_set_source_rgb(cr, 0.9, 0.9, 0.0);
+                cairo_rectangle(cr, 1, (int)(length * (1.0f - peak_frac)) + 1, w, 1);
+                cairo_fill(cr);
+            }
+            break;
     }
 
     cairo_destroy(cr);
@@ -289,7 +289,8 @@ static void gtk_meter_adjustment_changed(GtkAdjustment *adjustment, gpointer dat
     meter = GTK_METER(data);
 
     if ((meter->old_lower != gtk_adjustment_get_lower(adjustment)) ||
-        (meter->old_upper != gtk_adjustment_get_upper(adjustment))) {
+        (meter->old_upper != gtk_adjustment_get_upper(adjustment)))
+    {
         meter->iec_lower = iec_scale(gtk_adjustment_get_lower(adjustment));
         meter->iec_upper = iec_scale(gtk_adjustment_get_upper(adjustment));
 

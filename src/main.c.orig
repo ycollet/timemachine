@@ -138,9 +138,9 @@ int main(int argc, char *argv[])
 
     if (num_ports < 1 || num_ports > MAX_PORTS || help) {
         fprintf(stderr, "Usage %s: [-h] [-i] [-c channels] [-n jack-name]\n\t"
-                        "[-t buffer-length] [-p file prefix] [-f format]\n\t"
-                        "[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n\t"
-                        "[port-name ...]\n\n", argv[0]);
+                "[-t buffer-length] [-p file prefix] [-f format]\n\t"
+                "[-a] [-b begin-threshold] [-e end-threshold] [-T end-time]\n\t"
+                "[port-name ...]\n\n", argv[0]);
         fprintf(stderr, "\t-h\tshow this help\n");
         fprintf(stderr, "\t-i\tinteractive mode (console instead of X11) also enabled\n\t\tif DISPLAY is unset\n");
         fprintf(stderr, "\t-c\tspecify number of recording channels\n");

@@ -30,7 +30,8 @@ extern "C" {
 typedef struct _GtkMeterScale      GtkMeterScale;
 typedef struct _GtkMeterScaleClass GtkMeterScaleClass;
 
-struct _GtkMeterScale {
+struct _GtkMeterScale
+{
     GtkWidget parent_instance;
 
     guint  direction;
@@ -41,7 +42,8 @@ struct _GtkMeterScale {
     gfloat iec_upper;
 };
 
-struct _GtkMeterScaleClass {
+struct _GtkMeterScaleClass
+{
     GtkWidgetClass parent_class;
 };
 

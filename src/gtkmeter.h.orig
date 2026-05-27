@@ -30,7 +30,8 @@ extern "C" {
 typedef struct _GtkMeter      GtkMeter;
 typedef struct _GtkMeterClass GtkMeterClass;
 
-struct _GtkMeter {
+struct _GtkMeter
+{
     GtkWidget parent_instance;
 
     guint direction : 2;
@@ -53,7 +54,8 @@ struct _GtkMeter {
     GtkAdjustment *adjustment;
 };
 
-struct _GtkMeterClass {
+struct _GtkMeterClass
+{
     GtkWidgetClass parent_class;
 };
 

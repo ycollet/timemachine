@@ -68,9 +68,9 @@ GtkWidget *gtk_meterscale_new(gint direction, float min, float max)
 }
 
 static void gtk_meterscale_measure(GtkWidget *widget, GtkOrientation orientation,
-                                   int for_size,
-                                   int *minimum, int *natural,
-                                   int *minimum_baseline, int *natural_baseline)
+                                    int for_size,
+                                    int *minimum, int *natural,
+                                    int *minimum_baseline, int *natural_baseline)
 {
     GtkMeterScale *meterscale = GTK_METERSCALE(widget);
     PangoContext       *pc;
@@ -136,9 +136,9 @@ static void gtk_meterscale_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
 }
 
 static void meterscale_draw_notch_label(GtkMeterScale *meterscale, cairo_t *cr,
-                                        int widget_width, int widget_height,
-                                        float db, int mark,
-                                        PangoRectangle *last_label_rect)
+                                         int widget_width, int widget_height,
+                                         float db, int mark,
+                                         PangoRectangle *last_label_rect)
 {
     int length, width, pos;
     int vertical = 0;
@@ -197,14 +197,16 @@ static void meterscale_draw_notch_label(GtkMeterScale *meterscale, cairo_t *cr,
         /* Skip if overlapping previous label */
         if (vertical &&
             last_label_rect->y < y + rect.height + 2 &&
-            last_label_rect->y + last_label_rect->height + 2 > y) {
+            last_label_rect->y + last_label_rect->height + 2 > y)
+        {
             g_object_unref(pl);
             meterscale_draw_notch(meterscale, cr, widget_width, widget_height, db, mark);
             return;
         }
         if (!vertical &&
             last_label_rect->x < x + rect.width + 2 &&
-            last_label_rect->x + last_label_rect->width + 2 > x) {
+            last_label_rect->x + last_label_rect->width + 2 > x)
+        {
             g_object_unref(pl);
             meterscale_draw_notch(meterscale, cr, widget_width, widget_height, db, mark);
             return;
@@ -225,8 +227,8 @@ static void meterscale_draw_notch_label(GtkMeterScale *meterscale, cairo_t *cr,
 }
 
 static void meterscale_draw_notch(GtkMeterScale *meterscale, cairo_t *cr,
-                                  int widget_width, int widget_height,
-                                  float db, int mark)
+                                   int widget_width, int widget_height,
+                                   float db, int mark)
 {
     int pos, length, width;
 
