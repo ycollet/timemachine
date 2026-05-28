@@ -96,25 +96,24 @@ int process(jack_nframes_t nframes, void *arg)
             }
         }
 
-        for (i = 0; i < nframes; i++) {
-            if (fabsf(in[i]) > peak[port]) {
-                peak[port] = fabsf(in[i]);
-            }
-        }
-
+        /* Peak detection and buffering in a single pass.
+         * Also fixes off-by-one: pre_buffer used pos > pre_size which
+         * allowed writing to index pre_size (one past the allocation). */
         if (rec) {
             pos = disk_write_pos;
             for (i = 0; i < nframes; i++) {
+                float s = fabsf(in[i]);
+                if (s > peak[port]) peak[port] = s;
                 disk_buffer[port][pos] = in[i];
                 pos = (pos + 1) & (DISK_SIZE - 1);
             }
         } else {
             pos = pre_pos;
             for (i = 0; i < nframes; i++) {
-                pre_buffer[port][pos++] = in[i];
-                if (pos > pre_size) {
-                    pos = 0;
-                }
+                float s = fabsf(in[i]);
+                if (s > peak[port]) peak[port] = s;
+                pre_buffer[port][pos] = in[i];
+                if (++pos >= pre_size) pos = 0;
             }
         }
     }
@@ -139,8 +138,7 @@ int writer_thread(void *d)
 
 again:
     while (!recording && !quiting) {
-        usleep(100);
-
+        usleep(10000);
     }
     if (quiting) {
         recording_done = 1;
@@ -218,7 +216,7 @@ again:
         sf_writef_float(out, buf, opos);
         disk_read_pos = i;
         opos = 0;
-        usleep(10);
+        usleep(1000);
     }
     sf_close(out);
 
@@ -302,7 +300,7 @@ gboolean meter_tick(gpointer user_data)
         need_ui_sync = 0;
     }
 
-    for (i=0; i<MAX_PORTS; i++) {
+    for (i=0; i<num_ports; i++) {
         data[i] = peak[i];
         peak[i] = peak[i] - 0.1f < 0.0f ? 0.0f : peak[i] - 0.1f;
     }

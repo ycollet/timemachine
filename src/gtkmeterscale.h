@@ -39,6 +39,11 @@ struct _GtkMeterScale {
     gfloat upper;
     gfloat iec_lower;
     gfloat iec_upper;
+
+    /* Render cache — rebuilt only when the widget is resized */
+    cairo_surface_t *cache;
+    int              cache_width;
+    int              cache_height;
 };
 
 struct _GtkMeterScaleClass {

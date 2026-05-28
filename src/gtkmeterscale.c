@@ -17,6 +17,7 @@
 #define METERSCALE_MAX_FONT_SIZE 8
 #define METERSCALE_DEFAULT_LENGTH 100
 
+static void gtk_meterscale_dispose     (GObject           *object);
 static void gtk_meterscale_snapshot    (GtkWidget         *widget,
                                         GtkSnapshot       *snapshot);
 static void gtk_meterscale_measure     (GtkWidget         *widget,
@@ -39,8 +40,10 @@ G_DEFINE_TYPE(GtkMeterScale, gtk_meterscale, GTK_TYPE_WIDGET)
 
 static void gtk_meterscale_class_init(GtkMeterScaleClass *class)
 {
+    GObjectClass   *object_class = G_OBJECT_CLASS(class);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
 
+    object_class->dispose  = gtk_meterscale_dispose;
     widget_class->snapshot = gtk_meterscale_snapshot;
     widget_class->measure  = gtk_meterscale_measure;
 
@@ -49,9 +52,24 @@ static void gtk_meterscale_class_init(GtkMeterScaleClass *class)
 
 static void gtk_meterscale_init(GtkMeterScale *meterscale)
 {
-    meterscale->direction = 0;
-    meterscale->iec_lower = 0.0f;
-    meterscale->iec_upper = 0.0f;
+    meterscale->direction    = 0;
+    meterscale->iec_lower    = 0.0f;
+    meterscale->iec_upper    = 0.0f;
+    meterscale->cache        = NULL;
+    meterscale->cache_width  = 0;
+    meterscale->cache_height = 0;
+}
+
+static void gtk_meterscale_dispose(GObject *object)
+{
+    GtkMeterScale *meterscale = GTK_METERSCALE(object);
+
+    if (meterscale->cache) {
+        cairo_surface_destroy(meterscale->cache);
+        meterscale->cache = NULL;
+    }
+
+    G_OBJECT_CLASS(gtk_meterscale_parent_class)->dispose(object);
 }
 
 GtkWidget *gtk_meterscale_new(gint direction, float min, float max)
@@ -110,28 +128,47 @@ static void gtk_meterscale_snapshot(GtkWidget *widget, GtkSnapshot *snapshot)
     GtkMeterScale *meterscale = GTK_METERSCALE(widget);
     int width  = gtk_widget_get_width(widget);
     int height = gtk_widget_get_height(widget);
-    PangoRectangle lr = {0, 0, 0, 0};
-    float val;
 
+    /* The scale content is static; rebuild the cache only when resized. */
+    if (!meterscale->cache ||
+        meterscale->cache_width  != width ||
+        meterscale->cache_height != height) {
+
+        if (meterscale->cache)
+            cairo_surface_destroy(meterscale->cache);
+
+        meterscale->cache = cairo_image_surface_create(
+            CAIRO_FORMAT_ARGB32, width, height);
+        meterscale->cache_width  = width;
+        meterscale->cache_height = height;
+
+        cairo_t *cr = cairo_create(meterscale->cache);
+        PangoRectangle lr = {0, 0, 0, 0};
+        float val;
+
+        cairo_set_source_rgb(cr, 0.85, 0.85, 0.85);
+        cairo_rectangle(cr, 0, 0, width, height);
+        cairo_fill(cr);
+
+        meterscale_draw_notch_label(meterscale, cr, width, height, 0.0f, 3, &lr);
+
+        for (val = 5.0f; val < meterscale->upper; val += 5.0f)
+            meterscale_draw_notch_label(meterscale, cr, width, height, val, 2, &lr);
+
+        for (val = -5.0f; val > meterscale->lower; val -= 5.0f)
+            meterscale_draw_notch_label(meterscale, cr, width, height, val, 2, &lr);
+
+        for (val = -10.0f; val < 10.0f; val += 1.0f)
+            meterscale_draw_notch(meterscale, cr, width, height, val, 1);
+
+        cairo_destroy(cr);
+    }
+
+    /* Blit the cached surface into the GTK4 render tree. */
     graphene_rect_t bounds = GRAPHENE_RECT_INIT(0, 0, width, height);
     cairo_t *cr = gtk_snapshot_append_cairo(snapshot, &bounds);
-
-    /* Light background */
-    cairo_set_source_rgb(cr, 0.85, 0.85, 0.85);
-    cairo_rectangle(cr, 0, 0, width, height);
-    cairo_fill(cr);
-
-    meterscale_draw_notch_label(meterscale, cr, width, height, 0.0f, 3, &lr);
-
-    for (val = 5.0f; val < meterscale->upper; val += 5.0f)
-        meterscale_draw_notch_label(meterscale, cr, width, height, val, 2, &lr);
-
-    for (val = -5.0f; val > meterscale->lower; val -= 5.0f)
-        meterscale_draw_notch_label(meterscale, cr, width, height, val, 2, &lr);
-
-    for (val = -10.0f; val < 10.0f; val += 1.0f)
-        meterscale_draw_notch(meterscale, cr, width, height, val, 1);
-
+    cairo_set_source_surface(cr, meterscale->cache, 0, 0);
+    cairo_paint(cr);
     cairo_destroy(cr);
 }
 
