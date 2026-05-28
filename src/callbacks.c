@@ -39,20 +39,29 @@ gboolean on_window_close_request(GtkWindow *window, gpointer user_data)
 }
 
 #ifdef HAVE_LIBLO
-int osc_handler(const char *path, const char *types, lo_arg **argv, int argc,
-                lo_message msg, void *user_data)
+/* GTK must be touched only from the main thread; dispatch via g_idle_add. */
+static gboolean osc_ui_update(gpointer data)
 {
     GtkWidget *img = lookup_widget(main_window, "toggle_image");
 
-    if (user_data) {
-        recording_start();
-        gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_on));
+    if (data) {
+        gtk_picture_set_paintable(GTK_PICTURE(img), GDK_PAINTABLE(img_on));
     } else {
-        recording_stop();
         gtk_widget_set_sensitive(img, FALSE);
-        gtk_image_set_from_paintable(GTK_IMAGE(img), GDK_PAINTABLE(img_busy));
+        gtk_picture_set_paintable(GTK_PICTURE(img), GDK_PAINTABLE(img_busy));
     }
+    return G_SOURCE_REMOVE;
+}
 
+int osc_handler(const char *path, const char *types, lo_arg **argv, int argc,
+                lo_message msg, void *user_data)
+{
+    if (user_data)
+        recording_start();
+    else
+        recording_stop();
+
+    g_idle_add(osc_ui_update, user_data);
     return 0;
 }
 
