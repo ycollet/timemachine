@@ -283,6 +283,16 @@ int main(int argc, char *argv[])
             p = g_build_filename(exe_dir, "pixmaps", NULL);
             add_pixmap_directory(p);
             g_free(p);
+
+            /* App icon: GTK4 dropped pixbuf-based gtk_window_set_icon();
+             * the only remaining mechanism is an icon-theme name, which
+             * requires a hicolor/<size>/apps/<name> layout. The build tree
+             * has one next to the executable (see CMakeLists.txt); system
+             * installs get one under the standard /usr/share/icons search
+             * path automatically. This only takes effect on X11 — GTK4
+             * silently ignores icon names on Wayland and macOS. */
+            GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display(gdk_display_get_default());
+            gtk_icon_theme_add_search_path(icon_theme, exe_dir);
             g_free(exe_dir);
         }
         add_pixmap_directory(PACKAGE_DATA_DIR "/" PACKAGE "/pixmaps");
@@ -294,6 +304,7 @@ int main(int argc, char *argv[])
         img_busy = create_texture("busy.png");
 
         main_window = create_window(client_name);
+        gtk_window_set_icon_name(GTK_WINDOW(main_window), "timemachine");
         gtk_window_present(GTK_WINDOW(main_window));
 
         bind_meters();

@@ -137,3 +137,25 @@ install(FILES
     pixmaps/timemachine-icon.png
     DESTINATION ${CMAKE_INSTALL_DATADIR}/timemachine/pixmaps
 )
+
+# Install the app icon into the standard hicolor icon theme so that
+# gtk_window_set_icon_name("timemachine") (called from main.c) can find it.
+# GTK/GDK search /usr/share/icons (and other XDG data dirs) for icon themes
+# by default, so no extra runtime registration is needed for this location.
+# Note: GTK4 only honours icon names set this way on X11 — it is a silent
+# no-op on Wayland and macOS (see main.c).
+install(FILES pixmaps/timemachine-icon.png
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/64x64/apps
+    RENAME timemachine.png
+)
+
+# Mirror the same hicolor layout next to the built executable so the app
+# icon is also found when running straight out of the build tree (dev/test
+# runs), without requiring `make install` first.
+add_custom_command(TARGET timemachine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+        $<TARGET_FILE_DIR:timemachine>/hicolor/64x64/apps
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_SOURCE_DIR}/pixmaps/timemachine-icon.png
+        $<TARGET_FILE_DIR:timemachine>/hicolor/64x64/apps/timemachine.png
+)
